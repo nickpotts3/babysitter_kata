@@ -10,8 +10,6 @@
 # 0 1 2 3 4 5  6  7  8 9 10 11
 
 
-
-
 class Babysitter:
     def __init__(self) -> None:
         self.regularShiftPay = 12
@@ -24,11 +22,11 @@ class Babysitter:
     # converts to int in range [0,11] because 11 hours is max. Military time will not work
     def convertTime(self,time):
         if ( time <= 12 and time >= 5):
-            return int(time - 5)
+            return (time - 5)
         elif(time == 0):
             return -1
         else:
-            return int(time + 7)
+            return (time + 7)
 
     # ensure start is before endtime and not greater than 5pm. Allow babysitter to start AFTER bedtime
     def validateStart(self,start,end) -> bool:
@@ -62,7 +60,9 @@ class Babysitter:
 
 
     def calculateRegularHours(self,start,end,bedtime) -> int:
-        pass
+        soonestTime = min(self.convertTime(end), self.convertTime(bedtime), self.convertTime(12))
+        return (soonestTime - self.convertTime(start))
+        
 
     def calculateBedtimeHours(self,start,end,bedtime) -> int:
         pass
@@ -114,3 +114,9 @@ assert sitter.validateBedtime(5,12) == True #normal case
 assert sitter.validateBedtime(5,5) == True #can start right at bedtime
 assert sitter.validateBedtime(6,4) == True #edge case (bedtime is latest sitter can work)
 assert sitter.validateBedtime(5,-2) == False #invalid parameter
+
+# ------ testing calculateRegularHours() ---
+assert (sitter.calculateRegularHours(5, 2, 10) == 5) #start at 5 end at 2 bed at 10 should get 5 of regular pay 
+assert (sitter.calculateRegularHours(10,2,1) == 2) # start at 10 end at 2 bed at 1 should get 2 hours because 12-10 = 2
+assert (sitter.calculateRegularHours(12,2,1) == 0) # start at midnight so no regular hours are paid
+assert (sitter.calculateRegularHours(9,12,9) == 0) # start and bedtime are the same, should equal 0
