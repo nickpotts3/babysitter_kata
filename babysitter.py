@@ -17,14 +17,14 @@ class Babysitter:
         self.bedtimeHours = 0
         self.midnightHours = 0
 
-    # converts to military time
+    # converts to int in range [0,11] because 11 hours is max. Military time will not work
     def convertTime(self,time):
         if ( time <= 12 and time >= 5):
-            return int(time)
+            return int(time - 5)
         elif(time == 0):
             return -1
         else:
-            return int(time + 12)
+            return int(time + 7)
 
     # ensure start is before endtime and not greater than 5pm. Allow babysitter to start AFTER bedtime
     def validateStart(self,start,end) -> bool:
@@ -38,16 +38,18 @@ class Babysitter:
             return True
 
     def validateEnd(self, start, end) -> bool:
-        if(end > 16):
+        if(self.convertTime(end) > 16):
             return False
         elif(self.convertTime(start) > self.convertTime(end)):
             return False
         elif(self.convertTime(end) == self.convertTime(start)):
             return False
+        elif(end == 5):
+            return 17
         else:
             return True
 
-    def validateBedtime(self,bedtime) -> bool:
+    def validateBedtime(self,bedtime, start) -> bool: # allow the babysitter to leave before bedtime (end < bedtime) is okay
         pass
 
     def calculateRegularHours(self,start,end,bedtime) -> int:
@@ -97,8 +99,10 @@ assert sitter.validateEnd(5,10) == True # start at 5 end at 10
 
 assert sitter.validateEnd(10,5) == False # end is before start
 
-assert sitter.validateEnd(4,1) == False # ensuring can not start before 5
+assert sitter.validateEnd(5,6) == False # ensuring can not end after 4
 
 assert sitter.validateEnd(5,5) == False # start and end time can not be the same because pointless
 
 assert sitter.validateEnd(5,4) == True # edge case of earliest start time and latest end time 
+
+assert sitter.validateEnd(8,7) == False
