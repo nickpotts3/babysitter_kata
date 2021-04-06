@@ -50,8 +50,16 @@ class Babysitter:
             return True
         pass
 
-    def validateBedtime(self,bedtime, start) -> bool: # allow the babysitter to leave before bedtime (end < bedtime) is okay
-        pass
+    def validateBedtime(self, start, bedtime) -> bool: # allow the babysitter to leave before bedtime BUT cannot start after bedtime
+        if(self.convertTime(bedtime) < self.convertTime(start)): # bedtime occurs before start
+            return False
+        elif(self.convertTime(bedtime) < 0 or self.convertTime(bedtime) > 11): # ensure it is within the 5-4 time range
+            return False
+        elif(bedtime < 0):
+            return False
+        else:
+            return True
+
 
     def calculateRegularHours(self,start,end,bedtime) -> int:
         pass
@@ -69,6 +77,8 @@ class Babysitter:
     def calculateTotalPay(self, start, end, bedtime) -> int:
         pass
 
+
+# __TESTS__
 sitter = Babysitter()
 
 # ------ testing convertTime() -----------
@@ -97,3 +107,10 @@ assert sitter.validateEnd(5,15) == False # test invalid end time
 assert sitter.validateEnd(10,10) == False # test end == start
 assert sitter.validateEnd(5, 12) == True # edge case
 assert sitter.validateEnd(5,1) == True # start at 5 end at 1am 
+
+# -------- Testing validateBedtime() -----
+assert sitter.validateBedtime(8,5) == False #bedtime is before arrival
+assert sitter.validateBedtime(5,12) == True #normal case
+assert sitter.validateBedtime(5,5) == True #can start right at bedtime
+assert sitter.validateBedtime(6,4) == True #edge case (bedtime is latest sitter can work)
+assert sitter.validateBedtime(5,-2) == False #invalid parameter
