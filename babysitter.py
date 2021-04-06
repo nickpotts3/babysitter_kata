@@ -5,6 +5,10 @@
 # MIDNIGHT SHIFT: MIDNIGHT - END-TIME = $16/HOUR
 
 
+# 5 6 7 8 9 10 11 12 1 2 3  4 
+
+# 0 1 2 3 4 5  6  7  8 9 10 11
+
 
 
 
@@ -28,26 +32,15 @@ class Babysitter:
 
     # ensure start is before endtime and not greater than 5pm. Allow babysitter to start AFTER bedtime
     def validateStart(self,start,end) -> bool:
-        if(self.convertTime(start) > 5):
+        if(self.convertTime(start) > self.convertTime(end)):
             return False
-        elif(self.convertTime(start) > self.convertTime(end)):
-            return False
-        elif(self.convertTime(start) == self.convertTime(end)):
-            return False
-        else:
+        elif(self.convertTime(start) < 11):
             return True
+        else:
+            return
 
     def validateEnd(self, start, end) -> bool:
-        if(self.convertTime(end) > 16):
-            return False
-        elif(self.convertTime(start) > self.convertTime(end)):
-            return False
-        elif(self.convertTime(end) == self.convertTime(start)):
-            return False
-        elif(end == 5):
-            return 17
-        else:
-            return True
+        pass
 
     def validateBedtime(self,bedtime, start) -> bool: # allow the babysitter to leave before bedtime (end < bedtime) is okay
         pass
@@ -71,14 +64,14 @@ class Babysitter:
 sitter = Babysitter()
 
 # ------ testing convertTime() -----------
-five = sitter.convertTime(5)
-assert five == 5
+zero = sitter.convertTime(5)
+assert zero == 0
 
-twelve = sitter.convertTime(12)
-assert twelve == 12
+seven = sitter.convertTime(12)
+assert seven == 7
 
-threeTo15 = sitter.convertTime(3)
-assert threeTo15 == 15
+fourTo11 = sitter.convertTime(4)
+assert fourTo11 == 11
 
 negOne = sitter.convertTime(0)
 assert negOne == -1
