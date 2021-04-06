@@ -16,8 +16,14 @@ class Babysitter:
         self.bedtimeHours = 0
         self.midnightHours = 0
 
+    # converts to military time
     def convertTime(self,time):
-        pass
+        if (time <= 12 and time >= 5):
+            return int(time)
+        elif(time == 0):
+            return -1
+        else:
+            return int(time + 12)
 
     def validateStart(self,start) -> bool:
         pass
@@ -43,4 +49,19 @@ class Babysitter:
 
     def calculateTotalPay(self, start, end, bedtime) -> int:
         pass
+
+sitter = Babysitter()
+
+# ------ testing convertTime() -----------
+five = sitter.convertTime(5)
+assert five == 5
+
+twelve = sitter.convertTime(12)
+assert twelve == 12
+
+threeTo15 = sitter.convertTime(3)
+assert threeTo15 == 15
+
+negOne = sitter.convertTime(0)
+assert negOne == -1
 
