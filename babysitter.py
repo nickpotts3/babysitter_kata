@@ -25,8 +25,16 @@ class Babysitter:
         else:
             return int(time + 12)
 
-    def validateStart(self,start) -> bool:
-        pass
+    # ensure start is before endtime and not greater than 5pm. Allow babysitter to start AFTER bedtime
+    def validateStart(self,start,end) -> bool:
+        if(start > 5):
+            return False
+        elif(start > end):
+            return False
+        elif(start == end):
+            return False
+        else:
+            return True
 
     def validateEnd(self,end) -> bool:
         pass
@@ -65,3 +73,8 @@ assert threeTo15 == 15
 negOne = sitter.convertTime(0)
 assert negOne == -1
 
+# ------- testing validateStart() ----------
+assert sitter.validateStart(5,10) == True # start at 5
+assert sitter.validateStart(10,5) == False # end is before start
+assert sitter.validateStart(4,1) == False # ensuring can not start before 5
+assert sitter.validateStart(5,5) == False # start and end time can not be the same because pointless
