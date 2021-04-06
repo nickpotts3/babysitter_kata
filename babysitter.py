@@ -40,6 +40,14 @@ class Babysitter:
             return
 
     def validateEnd(self, start, end) -> bool:
+        if(self.convertTime(end) > 11):
+            return False
+        elif(self.convertTime(end) < self.convertTime(start)):
+            return False
+        elif(self.convertTime(end) == self.convertTime(start)):
+            return False
+        else:
+            return True
         pass
 
     def validateBedtime(self,bedtime, start) -> bool: # allow the babysitter to leave before bedtime (end < bedtime) is okay
@@ -77,25 +85,15 @@ negOne = sitter.convertTime(0)
 assert negOne == -1
 
 # ------- testing validateStart() ----------
-assert sitter.validateStart(5,10) == True # start at 5 
-
-assert sitter.validateStart(10,5) == False # end is before start
-
-assert sitter.validateStart(4,1) == False # ensuring can not start before 5
-
-assert sitter.validateStart(5,5) == False # start and end time can not be the same because pointless
-
-assert sitter.validateStart(5,4) == True # testing edge case 
+assert sitter.validateStart(5,1) == True # start at 5
+assert sitter.validateStart(6,4) == True # start at 6 end at 4
+assert sitter.validateStart(3,12) == False #try starting before 5
+assert sitter.validateStart(5,4) == True # try longest shift possible
+assert sitter.validateStart(10,8) == False # try to end before start time
 
 # -------- testing validateEnd() ----------
-assert sitter.validateEnd(5,10) == True # start at 5 end at 10 
-
-assert sitter.validateEnd(10,5) == False # end is before start
-
-assert sitter.validateEnd(5,6) == False # ensuring can not end after 4
-
-assert sitter.validateEnd(5,5) == False # start and end time can not be the same because pointless
-
-assert sitter.validateEnd(5,4) == True # edge case of earliest start time and latest end time 
-
-assert sitter.validateEnd(8,7) == False
+assert sitter.validateEnd(5,4) == True # test full shift
+assert sitter.validateEnd(5,15) == False # test invalid end time
+assert sitter.validateEnd(10,10) == False # test end == start
+assert sitter.validateEnd(5, 12) == True # edge case
+assert sitter.validateEnd(5,1) == True # start at 5 end at 1am 
