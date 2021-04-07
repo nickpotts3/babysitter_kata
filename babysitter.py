@@ -28,7 +28,7 @@ class Babysitter:
         else:
             return (time + 7)
 
-    # ensure start is before endtime and not greater than 5pm. Allow babysitter to start AFTER bedtime
+    # ensure start is before endtime and not greater than 5pm.
     def validateStart(self,start,end) -> bool:
         if(self.convertTime(start) > self.convertTime(end)):
             return False
@@ -60,14 +60,14 @@ class Babysitter:
 
 
     def calculateRegularHours(self,start,end,bedtime) -> int:
-        soonestTime = min(self.convertTime(end), self.convertTime(bedtime), self.convertTime(12))
+        soonestTime = min(self.convertTime(end), self.convertTime(bedtime), self.convertTime(12)) # determine which comes first
         return (soonestTime - self.convertTime(start))
         
 
     def calculateBedtimeHours(self,end,bedtime) -> int:
-        if (self.convertTime(bedtime) >= self.convertTime(12)):
+        if (self.convertTime(bedtime) >= self.convertTime(12)): # if midnight or later return 0
             return 0
-        elif(self.convertTime(bedtime) >= self.convertTime(end)):
+        elif(self.convertTime(bedtime) >= self.convertTime(end)): # if babysitter ends before bedtime return 0
             return 0
         else:
             return ( min(self.convertTime(12),self.convertTime(end)) - self.convertTime(bedtime))
