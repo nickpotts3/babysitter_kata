@@ -135,3 +135,9 @@ assert (sitter.calculateBedtimeHours(8,12,8) == 0) # bedtime is same as start
 
 
 # ----- testing calculateMidnightHours() ----
+assert (sitter.calculateMidnightHours(2) == 2) # regular case
+assert (sitter.calculateMidnightHours(12) == 0) # end == midnight
+assert (sitter.calculateMidnightHours(10) == 0) # end is before midnight
+assert (sitter.calculateMidnightHours(4) == 4) # edge case where end == 4
+
+# ----- calculateTotalPay() --------------
