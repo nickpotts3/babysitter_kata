@@ -64,13 +64,13 @@ class Babysitter:
         return (soonestTime - self.convertTime(start))
         
 
-    def calculateBedtimeHours(self,start,end,bedtime) -> int:
-        if (self.convertTime(bedtime) > self.convertTime(12)):
+    def calculateBedtimeHours(self,end,bedtime) -> int:
+        if (self.convertTime(bedtime) >= self.convertTime(12)):
             return 0
-        elif(self.convertTime(bedtime) > self.convertTime(end)):
+        elif(self.convertTime(bedtime) >= self.convertTime(end)):
             return 0
         else:
-            return (self.convertTime(bedtime) - self.convertTime(start))
+            return ( min(self.convertTime(12),self.convertTime(end)) - self.convertTime(bedtime))
 
     def calculateMidnightHours(self,end) -> int:
         if(self.convertTime(end) > self.convertTime(12)):
@@ -80,7 +80,9 @@ class Babysitter:
 
 
     def calculateTotalPay(self, start, end, bedtime) -> int:
-        pass
+        return ( (self.calculateRegularHours(start,end,bedtime) * self.regularShiftPay) + 
+                (self.calculateBedtimeHours(end, bedtime) * self.bedtimeShiftPay) + 
+                (self.calculateMidnightHours(end) * self.midnightShiftPay))
 
 
 # __TESTS__
@@ -127,12 +129,11 @@ assert (sitter.calculateRegularHours(12,2,1) == 0) # start at midnight so no reg
 assert (sitter.calculateRegularHours(9,12,9) == 0) # start and bedtime are the same, should equal 0
 
 # ------ testing calculateBedtimeHours() ----
-assert (sitter.calculateBedtimeHours(5,2,10) == 5) # regular case
-assert (sitter.calculateBedtimeHours(5,12,11) == 6) #bedtime is 11
-assert (sitter.calculateBedtimeHours(5,8,8) == 3) #bedtime is same as end
-assert (sitter.calculateBedtimeHours(5,10,12) == 0) #bedtime is after end
-assert (sitter.calculateBedtimeHours(8,12,8) == 0) # bedtime is same as start
-
+assert (sitter.calculateBedtimeHours(2,10) == 2) # regular case
+assert (sitter.calculateBedtimeHours(12,11) == 1) #bedtime is 11
+assert (sitter.calculateBedtimeHours(8,8) == 0) #bedtime is same as end
+assert (sitter.calculateBedtimeHours(10,12) == 0) #bedtime is after end
+assert (sitter.calculateBedtimeHours(12,8) == 4) # bedtime is same as start
 
 # ----- testing calculateMidnightHours() ----
 assert (sitter.calculateMidnightHours(2) == 2) # regular case
@@ -141,3 +142,8 @@ assert (sitter.calculateMidnightHours(10) == 0) # end is before midnight
 assert (sitter.calculateMidnightHours(4) == 4) # edge case where end == 4
 
 # ----- calculateTotalPay() --------------
+assert (sitter.calculateTotalPay(5,7,6) == 20)
+assert (sitter.calculateTotalPay(10,2,12) == 56)
+assert (sitter.calculateTotalPay(5,4,10) == 140)
+assert (sitter.calculateTotalPay(12, 2, 12) == 32)
+assert (sitter.calculateTotalPay(5,1,10) == 92)
