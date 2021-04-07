@@ -65,7 +65,12 @@ class Babysitter:
         
 
     def calculateBedtimeHours(self,start,end,bedtime) -> int:
-        pass
+        if (self.convertTime(bedtime) > self.convertTime(12)):
+            return 0
+        elif(self.convertTime(bedtime) > self.convertTime(end)):
+            return 0
+        else:
+            return (self.convertTime(bedtime) - self.convertTime(start))
 
     def calculateMidnightHours(self,end) -> int:
         if(self.convertTime(end) > self.convertTime(12)):
@@ -120,3 +125,13 @@ assert (sitter.calculateRegularHours(5, 2, 10) == 5) #start at 5 end at 2 bed at
 assert (sitter.calculateRegularHours(10,2,1) == 2) # start at 10 end at 2 bed at 1 should get 2 hours because 12-10 = 2
 assert (sitter.calculateRegularHours(12,2,1) == 0) # start at midnight so no regular hours are paid
 assert (sitter.calculateRegularHours(9,12,9) == 0) # start and bedtime are the same, should equal 0
+
+# ------ testing calculateBedtimeHours() ----
+assert (sitter.calculateBedtimeHours(5,2,10) == 5) # regular case
+assert (sitter.calculateBedtimeHours(5,12,11) == 6) #bedtime is 11
+assert (sitter.calculateBedtimeHours(5,8,8) == 3) #bedtime is same as end
+assert (sitter.calculateBedtimeHours(5,10,12) == 0) #bedtime is after end
+assert (sitter.calculateBedtimeHours(8,12,8) == 0) # bedtime is same as start
+
+
+# ----- testing calculateMidnightHours() ----
