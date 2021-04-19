@@ -50,4 +50,14 @@ def test_regular_hours_zero():
 def test_regular_hours_start_midnight():
     assert sitter.calculateRegularHours(12,3,1) == 0
 
+def test_bedtime_hours_2_and_10():
+    assert (sitter.calculateBedtimeHours(2,10) == 2)
 
+def test_bedtime_hours_12_and_11():
+    assert (sitter.calculateBedtimeHours(12,11) == 1) #bedtime is 11
+
+def test_bedtime_hours_0():
+    assert (sitter.calculateBedtimeHours(8,8) == 0) #bedtime is same as end
+
+def test_bedtime_hours_bed_after_end():
+    assert (sitter.calculateBedtimeHours(10,12) == 0) #bedtime is after end
