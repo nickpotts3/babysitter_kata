@@ -15,29 +15,36 @@ class Babysitter:
         self.regularShiftPay = 12
         self.bedtimeShiftPay = 8
         self.midnightShiftPay = 16
-        self.regularHours = 0
-        self.bedtimeHours = 0
-        self.midnightHours = 0
 
     # converts to int in range [0,11] because 11 hours is max. Military time will not work
     def convertTime(self,time):
         if ( time <= 12 and time >= 5):
             return (time - 5)
         elif(time == 0):
-            return -1
+            raise Exception("Sorry, invalid time entered.")
         else:
             return (time + 7)
 
-    # ensure start is before endtime and not greater than 5pm.
-    def validateStart(self,start,end) -> bool:
-        if(self.convertTime(start) > self.convertTime(end)):
+    def validateTimes(self,start,end,bedtime) -> bool:
+        if(start < 0 or end < 0 or bedtime < 0):
             return False
-        elif(self.convertTime(start) < 11):
+
+        if(self.__validateStart__(start,end) and self.__validateEnd__(start,end) and self.__validateBedtime__(start,bedtime)):
             return True
         else:
-            return
+            return False
+        
+    # ensure start is before endtime and not greater than 5pm.
+    def __validateStart__(self,start,end) -> bool:
+        print(self.convertTime(start))
+        if(self.convertTime(start) > self.convertTime(end)): # end comes before start return false
+            return False
+        elif(self.convertTime(start) < 12):
+            return True
+        else:
+            return False
 
-    def validateEnd(self, start, end) -> bool:
+    def __validateEnd__(self, start, end) -> bool:
         if(self.convertTime(end) > 11):
             return False
         elif(self.convertTime(end) < self.convertTime(start)):
@@ -48,7 +55,7 @@ class Babysitter:
             return True
         pass
 
-    def validateBedtime(self, start, bedtime) -> bool: # allow the babysitter to leave before bedtime BUT cannot start after bedtime
+    def __validateBedtime__(self, start, bedtime) -> bool: # allow the babysitter to leave before bedtime BUT cannot start after bedtime
         if(self.convertTime(bedtime) < self.convertTime(start)): # bedtime occurs before start
             return False
         elif(self.convertTime(bedtime) < 0 or self.convertTime(bedtime) > 11): # ensure it is within the 5-4 time range
@@ -60,7 +67,7 @@ class Babysitter:
 
 
     def calculateRegularHours(self,start,end,bedtime) -> int:
-        
+
         soonestTime = min(self.convertTime(end), self.convertTime(bedtime), self.convertTime(12)) # determine which comes first
         return (soonestTime - self.convertTime(start))
         
@@ -89,39 +96,7 @@ class Babysitter:
 # __TESTS__
 sitter = Babysitter()
 
-# ------ testing convertTime() -----------
-zero = sitter.convertTime(5)
-assert zero == 0
-
-seven = sitter.convertTime(12)
-assert seven == 7
-
-fourTo11 = sitter.convertTime(4)
-assert fourTo11 == 11
-
-negOne = sitter.convertTime(0)
-assert negOne == -1
-
-# ------- testing validateStart() ----------
-assert sitter.validateStart(5,1) == True # start at 5
-assert sitter.validateStart(6,4) == True # start at 6 end at 4
-assert sitter.validateStart(3,12) == False #try starting before 5
-assert sitter.validateStart(5,4) == True # try longest shift possible
-assert sitter.validateStart(10,8) == False # try to end before start time
-
-# -------- testing validateEnd() ----------
-assert sitter.validateEnd(5,4) == True # test full shift
-assert sitter.validateEnd(5,15) == False # test invalid end time
-assert sitter.validateEnd(10,10) == False # test end == start
-assert sitter.validateEnd(5, 12) == True # edge case
-assert sitter.validateEnd(5,1) == True # start at 5 end at 1am 
-
-# -------- Testing validateBedtime() -----
-assert sitter.validateBedtime(8,5) == False #bedtime is before arrival
-assert sitter.validateBedtime(5,12) == True #normal case
-assert sitter.validateBedtime(5,5) == True #can start right at bedtime
-assert sitter.validateBedtime(6,4) == True #edge case (bedtime is latest sitter can work)
-assert sitter.validateBedtime(5,-2) == False #invalid parameter
+sitter.validateTimes(-5,12,10)
 
 # ------ testing calculateRegularHours() ---
 assert (sitter.calculateRegularHours(5, 2, 10) == 5) #start at 5 end at 2 bed at 10 should get 5 of regular pay 
