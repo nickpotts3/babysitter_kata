@@ -101,13 +101,6 @@ class Babysitter:
 sitter = Babysitter()
 
 
-# ------ testing calculateBedtimeHours() ----
-assert (sitter.calculateBedtimeHours(2,10) == 2) # regular case
-assert (sitter.calculateBedtimeHours(12,11) == 1) #bedtime is 11
-assert (sitter.calculateBedtimeHours(8,8) == 0) #bedtime is same as end
-assert (sitter.calculateBedtimeHours(10,12) == 0) #bedtime is after end
-assert (sitter.calculateBedtimeHours(12,8) == 4) # bedtime is same as start
-
 # ----- testing calculateMidnightHours() ----
 assert (sitter.calculateMidnightHours(2) == 2) # regular case
 assert (sitter.calculateMidnightHours(12) == 0) # end == midnight

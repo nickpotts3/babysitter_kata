@@ -61,3 +61,15 @@ def test_bedtime_hours_0():
 
 def test_bedtime_hours_bed_after_end():
     assert (sitter.calculateBedtimeHours(10,12) == 0) #bedtime is after end
+
+def test_midnight_hours_2():
+    assert (sitter.calculateMidnightHours(2) == 2) # regular case
+
+def test_midnight_hours_0():
+    assert (sitter.calculateMidnightHours(12) == 0) # end == midnight
+
+def test_midnight_hours_end_before_midnight():
+    assert (sitter.calculateMidnightHours(10) == 0) # end is before midnight
+
+def test_midnight_hours_4():
+    assert (sitter.calculateMidnightHours(4) == 4) # edge case where end == 4
