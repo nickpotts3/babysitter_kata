@@ -17,7 +17,7 @@ class Babysitter:
         self.midnightShiftPay = 16
 
     # converts to int in range [0,11] because 11 hours is max. Military time will not work
-    def convertTime(self,time):
+    def __convertTime(self,time):
         if ( time <= 12 and time >= 5):
             return (time - 5)
         elif(time == 0):
@@ -25,6 +25,7 @@ class Babysitter:
         else:
             return (time + 7)
 
+# public method used to validate the start, end, and bedtime. Exception thrown if one of the methods returns false or input is 0 
     def validateTimes(self,start,end,bedtime) -> bool:
         if(start < 0 or end < 0 or bedtime < 0):
             #return False
@@ -40,29 +41,28 @@ class Babysitter:
         
     # ensure start is before endtime and not greater than 5pm.
     def __validateStart__(self,start,end) -> bool:
-        print(self.convertTime(start))
-        if(self.convertTime(start) > self.convertTime(end)): # end comes before start return false
+        print(self.__convertTime(start))
+        if(self.__convertTime(start) > self.__convertTime(end)): # end comes before start return false
             return False
-        elif(self.convertTime(start) < 12):
+        elif(self.__convertTime(start) < 12):
             return True
         else:
             return False
 
     def __validateEnd__(self, start, end) -> bool:
-        if(self.convertTime(end) > 11):
+        if(self.__convertTime(end) > 11):
             return False
-        elif(self.convertTime(end) < self.convertTime(start)):
+        elif(self.__convertTime(end) < self.__convertTime(start)):
             return False
-        elif(self.convertTime(end) == self.convertTime(start)):
+        elif(self.__convertTime(end) == self.__convertTime(start)):
             return False
         else:
             return True
-        pass
 
     def __validateBedtime__(self, start, bedtime) -> bool: # allow the babysitter to leave before bedtime BUT cannot start after bedtime
-        if(self.convertTime(bedtime) < self.convertTime(start)): # bedtime occurs before start
+        if(self.__convertTime(bedtime) < self.__convertTime(start)): # bedtime occurs before start
             return False
-        elif(self.convertTime(bedtime) < 0 or self.convertTime(bedtime) > 11): # ensure it is within the 5-4 time range
+        elif(self.__convertTime(bedtime) < 0 or self.__convertTime(bedtime) > 11): # ensure it is within the 5-4 time range
             return False
         elif(bedtime < 0):
             return False
@@ -72,21 +72,21 @@ class Babysitter:
 
     def calculateRegularHours(self,start,end,bedtime) -> int:
 
-        soonestTime = min(self.convertTime(end), self.convertTime(bedtime), self.convertTime(12)) # determine which comes first
-        return (soonestTime - self.convertTime(start))
+        soonestTime = min(self.__convertTime(end), self.__convertTime(bedtime), self.__convertTime(12)) # determine which comes first
+        return (soonestTime - self.__convertTime(start))
         
 
     def calculateBedtimeHours(self,end,bedtime) -> int:
-        if (self.convertTime(bedtime) >= self.convertTime(12)): # if midnight or later return 0
+        if (self.__convertTime(bedtime) >= self.__convertTime(12)): # if midnight or later return 0
             return 0
-        elif(self.convertTime(bedtime) >= self.convertTime(end)): # if babysitter ends before bedtime return 0
+        elif(self.__convertTime(bedtime) >= self.__convertTime(end)): # if babysitter ends before bedtime return 0
             return 0
         else:
-            return ( min(self.convertTime(12),self.convertTime(end)) - self.convertTime(bedtime))
+            return ( min(self.__convertTime(12),self.__convertTime(end)) - self.__convertTime(bedtime))
 
     def calculateMidnightHours(self,end) -> int:
-        if(self.convertTime(end) > self.convertTime(12)):
-            return self.convertTime(end) - self.convertTime(12)
+        if(self.__convertTime(end) > self.__convertTime(12)):
+            return self.__convertTime(end) - self.__convertTime(12)
         else:
             return 0
 
