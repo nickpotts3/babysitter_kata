@@ -12,8 +12,10 @@ def test_convert_time_4():
 def test_convert_time_12():
     assert sitter.convertTime(12) == 7
 
+
+
 def test_validate_times_start_before_5():
-    assert sitter.validateTimes(4,1,9) == False # start at 5
+    assert sitter.validateTimes(4,1,9) == False
 
 def test_validate_times_start_after_end():
     assert sitter.validateTimes(7,5,10) == False
@@ -35,5 +37,17 @@ def test_validate_times_neg_end():
 
 def test_validate_times_neg_bedtime():
     assert sitter.validateTimes(5,12,-10) == False
+
+def test_regular_hours_full_time():
+    assert sitter.calculateRegularHours(5,4,12) == 7
+
+def test_regular_hours_1_hour():
+    assert sitter.calculateRegularHours(8,12,9) == 1
+
+def test_regular_hours_zero():
+    assert sitter.calculateRegularHours(11,2,11) == 0
+
+def test_regular_hours_start_midnight():
+    assert sitter.calculateRegularHours(12,3,1) == 0
 
 
