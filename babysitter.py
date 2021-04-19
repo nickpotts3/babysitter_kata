@@ -60,6 +60,7 @@ class Babysitter:
 
 
     def calculateRegularHours(self,start,end,bedtime) -> int:
+        
         soonestTime = min(self.convertTime(end), self.convertTime(bedtime), self.convertTime(12)) # determine which comes first
         return (soonestTime - self.convertTime(start))
         
