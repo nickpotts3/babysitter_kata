@@ -27,14 +27,14 @@ class Babysitter:
 
     def validateTimes(self,start,end,bedtime) -> bool:
         if(start < 0 or end < 0 or bedtime < 0):
-            return False
-          #  raise Exception("Time can not be 0 or negative.")
+            #return False
+            raise Exception("Time can not be 0 or negative.")
 
         if(self.__validateStart__(start,end) and self.__validateEnd__(start,end) and self.__validateBedtime__(start,bedtime)):
             return True
         else:
-            return False
-           # raise Exception("Sorry, invalid times supplied. Please try again.")
+            #return False
+            raise Exception("Sorry, invalid times supplied. Please try again.")
             
             
         
@@ -95,21 +95,3 @@ class Babysitter:
         return ( (self.calculateRegularHours(start,end,bedtime) * self.regularShiftPay) + 
                 (self.calculateBedtimeHours(end, bedtime) * self.bedtimeShiftPay) + 
                 (self.calculateMidnightHours(end) * self.midnightShiftPay))
-
-
-# __TESTS__
-sitter = Babysitter()
-
-
-# ----- testing calculateMidnightHours() ----
-assert (sitter.calculateMidnightHours(2) == 2) # regular case
-assert (sitter.calculateMidnightHours(12) == 0) # end == midnight
-assert (sitter.calculateMidnightHours(10) == 0) # end is before midnight
-assert (sitter.calculateMidnightHours(4) == 4) # edge case where end == 4
-
-# ----- calculateTotalPay() --------------
-assert (sitter.calculateTotalPay(5,7,6) == 20)
-assert (sitter.calculateTotalPay(10,2,12) == 56)
-assert (sitter.calculateTotalPay(5,4,10) == 140)
-assert (sitter.calculateTotalPay(12, 2, 12) == 32)
-assert (sitter.calculateTotalPay(5,1,10) == 92)
